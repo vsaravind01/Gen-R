@@ -1,16 +1,20 @@
 import matplotlib.pyplot as plt
+from os import path, mkdir
 from PIL import Image
 import json
 
 
-class barChart():
+class barChart:
     def __init__(self):
-        with open('data.json', 'r') as jsonFile:
+        with open("data.json", "r") as jsonFile:
             data = json.load(jsonFile)
         self.marks = []
         self.subjects = []
         self.title = ""
-        self.y_axis_range = [0, data['max']]
+        self.y_axis_range = [0, data["max"]]
+
+        if not path.isdir(".\\charts"):
+            mkdir(".\\charts")
 
     def generate(self, marks, subjects, name, title="Test"):
 
@@ -18,7 +22,12 @@ class barChart():
         print(name)
         details = dict(zip(subjects, marks))
         print(details)
-        plt.bar(subjects, marks, width=0.72, color=['orange', 'limegreen', 'violet', 'gold', 'royalblue'])
+        plt.bar(
+            subjects,
+            marks,
+            width=0.72,
+            color=["orange", "limegreen", "violet", "gold", "royalblue"],
+        )
         plt.xlabel("Subjects")
         plt.ylabel("Marks")
         plt.xticks(subjects)
@@ -35,4 +44,5 @@ class barChart():
         newImageSizeHeight = int(imageSizeHeight * n)
 
         image = image.resize((newImageSizeWidth, newImageSizeHeight), Image.ANTIALIAS)
-        image.save(f"charts\\ppm\\{name}.ppm", 'ppm')
+        image.save(f"charts\\ppm\\{name}.ppm", "ppm")
+
