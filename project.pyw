@@ -23,36 +23,45 @@ class Application(tk.Frame):
         root.config(menu=menu)
 
         file = tk.Menu(menu, tearoff=False)
-        file.add_command(label="Refresh", command=self.refresh, accelerator='(F5)')
-        file.add_command(label="Exit", command=self.quit, accelerator='(Alt+F4)')
+        file.add_command(label="Refresh", command=self.refresh, accelerator="(F5)")
+        file.add_command(label="Exit", command=self.quit, accelerator="(Alt+F4)")
         menu.add_cascade(label="File", menu=file)
 
         edit = tk.Menu(menu, tearoff=False)
-        edit.add_command(label="Upload Data", command=self.upload, accelerator='(Enter)')
-        edit.add_command(label="Clear Entries", command=lambda:
-        self.clear(
-            [self.name,
-             self.Class,
-             self.section,
-             self.admin,
-             self.subject1_,
-             self.subject2_,
-             self.subject3_,
-             self.subject4_,
-             self.subject5_]
-        ),
-                         accelerator='(Alt+C)'
-                         )
+        edit.add_command(
+            label="Upload Data", command=self.upload, accelerator="(Enter)"
+        )
+        edit.add_command(
+            label="Clear Entries",
+            command=lambda: self.clear(
+                [
+                    self.name,
+                    self.Class,
+                    self.section,
+                    self.admin,
+                    self.subject1_,
+                    self.subject2_,
+                    self.subject3_,
+                    self.subject4_,
+                    self.subject5_,
+                ]
+            ),
+            accelerator="(Alt+C)",
+        )
         edit.add_command(label="Edit Subject Details", command=self.CreateTop)
         edit.add_command(label="Data Backup", command=self.export)
         menu.add_cascade(label="Edit", menu=edit)
 
         run = tk.Menu(menu, tearoff=False)
-        run.add_command(label="Open CSV file", command=self.openCsv, accelerator='(Ctrl+O)')
-        run.add_command(label="Generate Report (PDF)", command=self.pdfGen, accelerator='(Ctrl+G)')
+        run.add_command(
+            label="Open CSV file", command=self.openCsv, accelerator="(Ctrl+O)"
+        )
+        run.add_command(
+            label="Generate Report (PDF)", command=self.pdfGen, accelerator="(Ctrl+G)"
+        )
         menu.add_cascade(label="Run", menu=run)
 
-        self.icon = PhotoImage(file='report_generator.jpg')
+        self.icon = PhotoImage(file="logo\\report_generator.jpg")
 
         self.pack(ipadx=200, ipady=200)
         self.createWidgets()
@@ -85,7 +94,9 @@ class Application(tk.Frame):
             else:
                 return False
 
-        def adminChk(value=""):  # Admission_Number can contain only Numbers or frontslash("/")
+        def adminChk(
+            value="",
+        ):  # Admission_Number can contain only Numbers or frontslash("/")
             adminValidate = False
             self.statusbar.configure(text="Typing Admission Number...")
             if value == "/" or value.isdigit():
@@ -104,7 +115,7 @@ class Application(tk.Frame):
             read = csv.reader(file)
             self.sub = next(read)
 
-        with open('data.json', 'r') as jsonFile:
+        with open("data.json", "r") as jsonFile:
             self.data = json.load(jsonFile)
 
         # Frames Creation
@@ -118,10 +129,23 @@ class Application(tk.Frame):
         # Tooltip for marks range
         Tooltip.CreateToolTip(self.marks, text=f"Range(0-{self.data['max']})")
 
-        heading = tk.Label(self, text="Report Generator", fg="black", bg="grey65", width=200, height=3,
-                           font=("Century", 16))
+        heading = tk.Label(
+            self,
+            text="Report Generator",
+            fg="black",
+            bg="grey65",
+            width=200,
+            height=3,
+            font=("Century", 16),
+        )
         heading.pack(side=tk.TOP, fill=tk.X)
-        self.statusbar = tk.Label(self, text="Resources Build Successful…", bd=1, relief=tk.SUNKEN, anchor=tk.W)
+        self.statusbar = tk.Label(
+            self,
+            text="Resources Build Successful…",
+            bd=1,
+            relief=tk.SUNKEN,
+            anchor=tk.W,
+        )
         self.statusbar.pack(side=tk.BOTTOM, fill=tk.X)
 
         # Details Collection
@@ -135,62 +159,98 @@ class Application(tk.Frame):
         self.classStatus = self.container.register(classChk)
         self.sectionStatus = self.container.register(sectionChk)
 
-        self.name = ttk.Entry(self.details, validate="key",validatecommand=(self.nameValidation, '%S', '%P'))  # Name Entry
+        self.name = ttk.Entry(
+            self.details,
+            validate="key",
+            validatecommand=(self.nameValidation, "%S", "%P"),
+        )  # Name Entry
         self.name.grid(row=0, column=1)
 
         self.classLabel = ttk.Label(self.details, text="class")  # Class Label
         self.classLabel.grid(row=1, column=0)
 
-        self.Class = ttk.Entry(self.details, validate="key", validatecommand=(self.classStatus, '%S', "%P"))  # Class Entry
+        self.Class = ttk.Entry(
+            self.details, validate="key", validatecommand=(self.classStatus, "%S", "%P")
+        )  # Class Entry
         self.Class.grid(row=1, column=1)
 
         self.sectionLabel = ttk.Label(self.details, text="section")  # Section Label
         self.sectionLabel.grid(row=2, column=0)
 
-        self.section = ttk.Entry(self.details, validate="key",validatecommand=(self.sectionStatus, '%S', "%P"))  # Section Entry
+        self.section = ttk.Entry(
+            self.details,
+            validate="key",
+            validatecommand=(self.sectionStatus, "%S", "%P"),
+        )  # Section Entry
         self.section.grid(row=2, column=1)
 
-        self.adminLabel = ttk.Label(self.details, text="admin")  # Admission Number Label
+        self.adminLabel = ttk.Label(
+            self.details, text="admin"
+        )  # Admission Number Label
         self.adminLabel.grid(row=3, column=0)
 
         # Validation varible for Admission Number Entry
         self.adminvalidation = self.container.register(adminChk)
 
-        self.admin = ttk.Entry(self.details, validate="key", validatecommand=(self.adminvalidation, '%S'))  # Admission Number Entry
+        self.admin = ttk.Entry(
+            self.details, validate="key", validatecommand=(self.adminvalidation, "%S")
+        )  # Admission Number Entry
         self.admin.grid(row=3, column=1)
 
         # Marks Collection
 
-        self.marksValidation = self.container.register(marksChk)  # Validation Variable for Marks Entry
+        self.marksValidation = self.container.register(
+            marksChk
+        )  # Validation Variable for Marks Entry
 
         self.subject1_Label = ttk.Label(self.marks, text=self.sub[4].title())
         self.subject1_Label.grid(row=0, column=0)
 
-        self.subject1_ = ttk.Entry(self.marks, validate="key", validatecommand=(self.marksValidation, "%S", "%P"))
+        self.subject1_ = ttk.Entry(
+            self.marks,
+            validate="key",
+            validatecommand=(self.marksValidation, "%S", "%P"),
+        )
         self.subject1_.grid(row=0, column=1)
 
         self.subject2_Label = ttk.Label(self.marks, text=self.sub[5].title())
         self.subject2_Label.grid(row=1, column=0)
 
-        self.subject2_ = ttk.Entry(self.marks, validate="key", validatecommand=(self.marksValidation, "%S", "%P"))
+        self.subject2_ = ttk.Entry(
+            self.marks,
+            validate="key",
+            validatecommand=(self.marksValidation, "%S", "%P"),
+        )
         self.subject2_.grid(row=1, column=1)
 
         self.subject3_Label = ttk.Label(self.marks, text=self.sub[6].title())
         self.subject3_Label.grid(row=2, column=0)
 
-        self.subject3_ = ttk.Entry(self.marks, validate="key", validatecommand=(self.marksValidation, "%S", "%P"))
+        self.subject3_ = ttk.Entry(
+            self.marks,
+            validate="key",
+            validatecommand=(self.marksValidation, "%S", "%P"),
+        )
         self.subject3_.grid(row=2, column=1)
 
         self.subject4_Label = ttk.Label(self.marks, text=self.sub[7].title())
         self.subject4_Label.grid(row=3, column=0)
 
-        self.subject4_ = ttk.Entry(self.marks, validate="key", validatecommand=(self.marksValidation, "%S", "%P"))
+        self.subject4_ = ttk.Entry(
+            self.marks,
+            validate="key",
+            validatecommand=(self.marksValidation, "%S", "%P"),
+        )
         self.subject4_.grid(row=3, column=1)
 
         self.subject5_Label = ttk.Label(self.marks, text=self.sub[8].title())
         self.subject5_Label.grid(row=4, column=0)
 
-        self.subject5_ = ttk.Entry(self.marks, validate="key", validatecommand=(self.marksValidation, "%S", "%P"))
+        self.subject5_ = ttk.Entry(
+            self.marks,
+            validate="key",
+            validatecommand=(self.marksValidation, "%S", "%P"),
+        )
         self.subject5_.grid(row=4, column=1)
 
         # Buttons
@@ -200,21 +260,23 @@ class Application(tk.Frame):
         self.add.grid(row=0, column=0)
 
         # Button to Clear all entry fields
-        self.clearBtn = ttk.Button(self.buttons,
-                                   text="Clear",
-                                   command=lambda:
-                                   self.clear(
-                                       [self.name,
-                                        self.Class,
-                                        self.section,
-                                        self.admin,
-                                        self.subject1_,
-                                        self.subject2_,
-                                        self.subject3_,
-                                        self.subject4_,
-                                        self.subject5_]
-                                    )
-                                )
+        self.clearBtn = ttk.Button(
+            self.buttons,
+            text="Clear",
+            command=lambda: self.clear(
+                [
+                    self.name,
+                    self.Class,
+                    self.section,
+                    self.admin,
+                    self.subject1_,
+                    self.subject2_,
+                    self.subject3_,
+                    self.subject4_,
+                    self.subject5_,
+                ]
+            ),
+        )
         self.clearBtn.grid(row=0, column=1)
 
         # Frame packing (Grid Method)
@@ -245,22 +307,29 @@ class Application(tk.Frame):
 
         details = [name.title(), Class, section.upper(), admin]
         subjects = [self.sub[x].title() for x in range(4, 9)]
-        marks = [self.subject1_.get(), self.subject2_.get(), self.subject3_.get(),
-                 self.subject4_.get(), self.subject5_.get()]
+        marks = [
+            self.subject1_.get(),
+            self.subject2_.get(),
+            self.subject3_.get(),
+            self.subject4_.get(),
+            self.subject5_.get(),
+        ]
         data = details + marks
         markAllocation = dict(zip(subjects, marks))
 
         for detail in tuple(details + marks):
             if detail == "":
-                messagebox.showwarning(
-                    "Warning", "Please fill all the fields.")
+                messagebox.showwarning("Warning", "Please fill all the fields.")
                 self.statusbar.configure(text="Please fill all the fields...")
                 return
 
         rangeFail = False
         rangeFailSubjects = []
         for mark in markAllocation:
-            if int(markAllocation[mark]) > self.data['max'] or int(markAllocation[mark]) < 0:
+            if (
+                int(markAllocation[mark]) > self.data["max"]
+                or int(markAllocation[mark]) < 0
+            ):
                 rangeFail = True
                 rangeFailSubjects.append(mark)
 
@@ -268,10 +337,13 @@ class Application(tk.Frame):
             rangeFailSubjectsString = ""
             for subject in tuple(rangeFailSubjects):
                 rangeFailSubjectsString += subject + ","
-            messagebox.showwarning("Warning",
-                                   f"{rangeFailSubjectsString[:-1]} mark does not meet the required range (0-100).")
+            messagebox.showwarning(
+                "Warning",
+                f"{rangeFailSubjectsString[:-1]} mark does not meet the required range (0-100).",
+            )
             self.statusbar.configure(
-                text=f"{rangeFailSubjectsString[:-1]} mark does not meet the required range (0-100)...")
+                text=f"{rangeFailSubjectsString[:-1]} mark does not meet the required range (0-100)..."
+            )
             return
 
         try:
@@ -281,12 +353,13 @@ class Application(tk.Frame):
                     if (record["name"] == name) or (record["admin"] == admin):
                         duplicateEntry = messagebox.askquestion(
                             "Warning",
-                            f"{record['name']} (Admin : {record['admin']}) already exists!\nDo you want to upload it again?")
-                        if duplicateEntry == 'no':
+                            f"{record['name']} (Admin : {record['admin']}) already exists!\nDo you want to upload it again?",
+                        )
+                        if duplicateEntry == "no":
                             self.statusbar.configure(text="Duplication escaped...")
                             return
 
-            with open(self.database, "a", newline='\n') as file:
+            with open(self.database, "a", newline="\n") as file:
                 write = csv.writer(file)
                 write.writerow(data)
                 self.logs.configure(state="normal")
@@ -298,30 +371,41 @@ class Application(tk.Frame):
                 self.logs.insert(tk.END, "\n")
                 logger.log(log="\n")
                 self.logs.configure(state="disabled")
-                self.statusbar.configure(text="Details Uploaded to 'records.csv'...")
+                self.statusbar.configure(
+                    text=f"Details Uploaded to '{self.database}'..."
+                )
 
         except Exception as e:
             self.logs.configure(state="normal")
-            self.logs.insert(tk.END, f"\nA {e.__class__.__name__} occured while \nopening 'records.csv'\n\n")
-            logger.log(log=f"\nA {e.__class__.__name__} occured while opening 'records.csv'\n\n")
+            self.logs.insert(
+                tk.END,
+                f"\nA {e.__class__.__name__} occured while \nopening '{self.database}'\n\n",
+            )
+            logger.log(
+                log=f"\nA {e.__class__.__name__} occured while opening '{self.database}'\n\n"
+            )
             self.logs.configure(state="disabled")
 
     # Function to clear all Entry Fields (Alt+C)
 
     def clear(self, entries=[], event=None):
         for entry in entries:
-            entry.delete(0, 'end')
+            entry.delete(0, "end")
 
     # Function to call PDF generating program "report.py" (Ctrl+G)
 
-    def pdfGen(self, event=None):  # Function to call PDF generating program "report.py" (Ctrl+G)
+    def pdfGen(
+        self, event=None
+    ):  # Function to call PDF generating program "report.py" (Ctrl+G)
         repGen = messagebox.askquestion(
-            "Generate Reports", "Do you want to generate the reports now?")
-        if repGen == 'yes':
+            "Generate Reports", "Do you want to generate the reports now?"
+        )
+        if repGen == "yes":
             self.logs.configure(state="normal")
             # PDF report Generation log
             self.logs.insert(
-                tk.END, f"Pdf Generated :\n\t\t{datetime.datetime.now()}\n\n")
+                tk.END, f"Pdf Generated :\n\t\t{datetime.datetime.now()}\n\n"
+            )
             logger.log(log=f"Pdf Generated :\t{datetime.datetime.now()}\n")
             self.logs.configure(state="disabled")
             print(datetime.datetime.now())
@@ -337,7 +421,9 @@ class Application(tk.Frame):
         Popen(self.database, shell=True)
         self.logs.configure(state="normal")
         # CSV file request log
-        self.logs.insert(tk.END, f"CSV request initiated :\n\t\t{datetime.datetime.now()}\n\n")
+        self.logs.insert(
+            tk.END, f"CSV request initiated :\n\t\t{datetime.datetime.now()}\n\n"
+        )
         logger.log(log=f"CSV request initiated :\t{datetime.datetime.now()}\n")
         self.logs.configure(state="disabled")
         self.statusbar.configure(text="CSV request initiated...")
@@ -347,7 +433,7 @@ class Application(tk.Frame):
     def quit(self, event=None):
         self.statusbar.configure(text="Quit initiated...")
         quit_request = messagebox.askquestion("Confirm", "Do you want to quit?")
-        if quit_request == 'yes':
+        if quit_request == "yes":
             logger.log(log=f"Quitted Report Generator : {datetime.datetime.now()}\n\n")
             root.destroy()
         else:
@@ -360,15 +446,19 @@ class Application(tk.Frame):
         self.__init__()
 
     def export(self):
-        backuptrigger = messagebox.askquestion("Confirm",
-                                               "Your backup data will be stored at 'DB-Backup/RG-backup.db'.\nIt's a Sqlite Database.\nAre you sure?")
-        if backuptrigger == 'no':
+        backuptrigger = messagebox.askquestion(
+            "Confirm",
+            "Your backup data will be stored at 'DB-Backup/RG-backup.db'.\nIt's a Sqlite Database.\nAre you sure?",
+        )
+        if backuptrigger == "no":
             return
         else:
-            dbexport.backup()
+            dbexport.backup(database=self.database)
             self.logs.configure(state="normal")
             # PDF report Generation log
-            self.logs.insert(tk.END, f"Backup Successful :\n\t\t{datetime.datetime.now()}\n\n")
+            self.logs.insert(
+                tk.END, f"Backup Successful :\n\t\t{datetime.datetime.now()}\n\n"
+            )
             self.logs.configure(state="disabled")
             self.statusbar.configure(text="Data Backup Successful...")
 
@@ -426,25 +516,45 @@ class Application(tk.Frame):
         maxMarksLabel = ttk.Label(subjects, text="Maximum Marks")
         maxMarksLabel.grid(row=5, column=0)
 
-        maxMarks = ttk.Entry(subjects, validate="key", validatecommand=(self.marksValidation, "%S", "%P"))
+        maxMarks = ttk.Entry(
+            subjects, validate="key", validatecommand=(self.marksValidation, "%S", "%P")
+        )
         maxMarks.grid(row=5, column=1)
 
-        change = ttk.Button(buttons, text="Change",
-                            command=lambda: Change(entries=[subject1_.get(), subject2_.get(), subject3_.get(),
-                                                            subject4_.get(), subject5_.get()],
-                                                   maxMarks=maxMarks.get()))
+        change = ttk.Button(
+            buttons,
+            text="Change",
+            command=lambda: Change(
+                entries=[
+                    subject1_.get(),
+                    subject2_.get(),
+                    subject3_.get(),
+                    subject4_.get(),
+                    subject5_.get(),
+                ],
+                maxMarks=maxMarks.get(),
+            ),
+        )
         change.grid(row=0, column=0)
 
-        clear = ttk.Button(buttons, text="Clear", command=lambda: self.clear([self.name,
-                                                                              self.Class,
-                                                                              self.section,
-                                                                              self.admin,
-                                                                              subject1_,
-                                                                              subject2_,
-                                                                              subject3_,
-                                                                              subject4_,
-                                                                              subject5_,
-                                                                              maxMarks]))
+        clear = ttk.Button(
+            buttons,
+            text="Clear",
+            command=lambda: self.clear(
+                [
+                    self.name,
+                    self.Class,
+                    self.section,
+                    self.admin,
+                    subject1_,
+                    subject2_,
+                    subject3_,
+                    subject4_,
+                    subject5_,
+                    maxMarks,
+                ]
+            ),
+        )
         clear.grid(row=0, column=1)
 
         fake = ttk.Label(win, text="\t\t\t")
@@ -470,54 +580,82 @@ class Application(tk.Frame):
 
             if maxMarks == "":
                 self.statusbar.configure(text="Maximum Marks not specified...")
-                maxNil = messagebox.askquestion("Confirm",
-                                                f"You haven't given Maximum Mark!\nIf you don't Enter the maximum mark then the former maximum mark ({self.data['max']}).\n Are you sure?")
-                if maxNil == 'no':
+                maxNil = messagebox.askquestion(
+                    "Confirm",
+                    f"You haven't given Maximum Mark!\nIf you don't Enter the maximum mark then the former maximum mark ({self.data['max']}).\n Are you sure?",
+                )
+                if maxNil == "no":
                     return
                 else:
-                    upload(finalList=finalList, maxMarks=str(self.data['max']))
+                    upload(finalList=finalList, maxMarks=str(self.data["max"]))
                     self.statusbar.configure(
-                        text="Subjects edited to " + finalListStr[:-1] + " and the Maximum mark now is " + str(
-                            self.data['max']))
+                        text="Subjects edited to "
+                        + finalListStr[:-1]
+                        + " and the Maximum mark now is "
+                        + str(self.data["max"])
+                    )
                     logger.log(
-                        log=f"Subjects Names Updated :\t{datetime.datetime.now()}\nSubjects edited to " + finalListStr[
-                                                                                                          :-1] + "\n\n")
+                        log=f"Subjects Names Updated :\t{datetime.datetime.now()}\nSubjects edited to "
+                        + finalListStr[:-1]
+                        + "\n\n"
+                    )
             else:
                 upload(finalList=finalList, maxMarks=maxMarks)
                 logger.log(
-                    log=f"Subjects Names Updated :\t{datetime.datetime.now()}\nSubjects edited to " + finalListStr[
-                                                                                                      :-1] + "\n\n")
+                    log=f"Subjects Names Updated :\t{datetime.datetime.now()}\nSubjects edited to "
+                    + finalListStr[:-1]
+                    + "\n\n"
+                )
                 self.statusbar.configure(
-                    text="Subjects edited to " + finalListStr[:-1] + " and the Maximum mark now is " + str(maxMarks))
+                    text="Subjects edited to "
+                    + finalListStr[:-1]
+                    + " and the Maximum mark now is "
+                    + str(maxMarks)
+                )
 
         def upload(finalList, maxMarks):
             temp = []
             try:
-                with open('records.csv', 'r') as infile:
+                with open(self.database, "r") as infile:
                     reader = csv.reader(infile, skipinitialspace=True)
                     temp.extend(reader)
                 temp[0] = [self.sub[x] for x in range(0, 4)] + finalList
-                with open('records.csv', 'w', newline="\n") as outfile:
-                    writer = csv.writer(outfile, quoting=csv.QUOTE_NONE, skipinitialspace=True)
+                with open(self.database, "w", newline="\n") as outfile:
+                    writer = csv.writer(
+                        outfile, quoting=csv.QUOTE_NONE, skipinitialspace=True
+                    )
                     writer.writerows(temp)
                     self.logs.configure(state="normal")
                     # Subject names updation log
-                    self.logs.insert(tk.END, f"Subjects Names Updated :\n\t\t{datetime.datetime.now()}\n\n")
+                    self.logs.insert(
+                        tk.END,
+                        f"Subjects Names Updated :\n\t\t{datetime.datetime.now()}\n\n",
+                    )
                     self.logs.configure(state="disabled")
                 del temp
 
                 Max = {"max": int(maxMarks)}
-                with open('data.json', 'w') as file:
+                with open("data.json", "w") as file:
                     json.dump(Max, file, ensure_ascii=False, indent=4)
                     self.logs.configure(state="normal")
                     # maximum marks updation log
-                    self.logs.insert(tk.END, f"Maximum Mark Changed to {maxMarks} :\n\t\t{datetime.datetime.now()}\n\n")
-                    logger.log(log=f"Maximum Mark Changed to {maxMarks} :\t{datetime.datetime.now()}\n")
+                    self.logs.insert(
+                        tk.END,
+                        f"Maximum Mark Changed to {maxMarks} :\n\t\t{datetime.datetime.now()}\n\n",
+                    )
+                    logger.log(
+                        log=f"Maximum Mark Changed to {maxMarks} :\t{datetime.datetime.now()}\n"
+                    )
                     self.logs.configure(state="disabled")
             except Exception as e:
                 self.logs.configure(state="normal")
-                self.logs.insert(tk.END, f"\nA {e.__class__.__name__} occured while \nopening 'records.csv'\n\n")
-                logger.log(log=f"\nA {e.__class__.__name__} occured while opening 'records.csv'\n\n")
+                self.logs.insert(
+                    tk.END,
+                    f"\nA {e.__class__.__name__} occured while \nopening '{self.database}'\n\n",
+                )
+                logger.log(
+                    log=f"\nA {e.__class__.__name__} occured while opening '{self.database}'\n\n"
+                )
                 self.logs.configure(state="disabled")
 
 
@@ -526,25 +664,27 @@ class Application(tk.Frame):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.attributes('-fullscreen', True)
+    root.attributes("-fullscreen", True)
     app = Application(root)
 
     # Key-Bindings
 
-    root.bind("<Alt-c>",
-              lambda events:
-              app.clear([
-                  app.name,
-                  app.Class,
-                  app.section,
-                  app.admin,
-                  app.subject1_,
-                  app.subject2_,
-                  app.subject3_,
-                  app.subject4_,
-                  app.subject5_]
-                  )
-              )
+    root.bind(
+        "<Alt-c>",
+        lambda events: app.clear(
+            [
+                app.name,
+                app.Class,
+                app.section,
+                app.admin,
+                app.subject1_,
+                app.subject2_,
+                app.subject3_,
+                app.subject4_,
+                app.subject5_,
+            ]
+        ),
+    )
     root.bind("<Alt-C>", app.clear)
     root.bind("<Return>", app.upload)
     root.bind("<Control-o>", app.openCsv)

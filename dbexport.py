@@ -5,7 +5,7 @@ import csv
 from os import path, mkdir
 
 
-def backup():
+def backup(database):
     if not path.isdir(".\\DB-Backup"):
         mkdir(".\\DB-Backup")
     connection = sqlite3.connect(f"DB-Backup\\RG-Backup.db")
@@ -14,7 +14,7 @@ def backup():
     )
     cursor = connection.cursor()
     time = datetime.datetime.now()
-    with open("records.csv", "r") as file:
+    with open(database, "r") as file:
         data = csv.reader(file)
         data = next(data)
     subject_1 = data[4]
@@ -39,7 +39,7 @@ def backup():
     logger.log(
         log=f"""Table created by the Name : {time.strftime("%d")}{time.strftime("%b")}{time.strftime("%Y")}{time.strftime("%H")}{time.strftime("%M")}{time.strftime("%S")}\n"""
     )
-    with open("records.csv", "r") as file:
+    with open(database, "r") as file:
         values = csv.DictReader(file)
         for value in values:
             cursor.execute(
