@@ -2,6 +2,10 @@ import csv
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 import chartGen as Cg
+from os import path, mkdir
+
+if not path.isdir(".\\Reports"):
+    mkdir(".\\Reports")
 
 path = "Reports\\"
 with open("records.csv") as file:
@@ -12,11 +16,13 @@ with open("records.csv") as data:
     read = csv.DictReader(data)
     for i in read:
 
-        name = i['name']
+        name = i["name"]
         marks = [i[header[x]] for x in range(4, 9)]
         Cmarks = [int(mark) for mark in marks]
         chart = Cg.barChart()
-        chart.generate(marks=Cmarks, subjects=[header[x] for x in range(4, 9)], name=name)
+        chart.generate(
+            marks=Cmarks, subjects=[header[x] for x in range(4, 9)], name=name
+        )
 
         file = canvas.Canvas(f"{path}{i['name']}.pdf", pagesize=A4)
         file.drawString(240, 800, "REPORT")
@@ -46,4 +52,5 @@ with open("records.csv") as data:
         file.drawString(205 - 0 - 20, 700 + 50 - 200, i[header[8]])
 
         file.drawInlineImage(f"charts\\ppm\\{name}.ppm", 242, 500)
+
         file.save()
