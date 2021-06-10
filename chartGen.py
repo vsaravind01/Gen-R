@@ -16,12 +16,13 @@ class barChart:
         if not path.isdir(".\\charts"):
             mkdir(".\\charts")
 
+        if not path.isdir(".\\charts\\ppm"):
+            mkdir(".\\charts\\ppm")
+
     def generate(self, marks, subjects, name, title="Test"):
 
         plt.ylim(self.y_axis_range)
-        print(name)
         details = dict(zip(subjects, marks))
-        print(details)
         plt.bar(
             subjects,
             marks,

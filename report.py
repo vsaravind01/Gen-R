@@ -1,14 +1,13 @@
 import csv
-from types import GeneratorType
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 import chartGen as Cg
-from os import path, mkdir
+import os
 
 
 def Generate_Report(database):
-    if not path.isdir(".\\Reports"):
-        mkdir(".\\Reports")
+    if not os.path.isdir(".\\Reports"):
+        os.mkdir(".\\Reports")
 
     path = "Reports\\"
     with open(database) as file:

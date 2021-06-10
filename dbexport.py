@@ -63,6 +63,5 @@ def tableNames():
     cursor = connection.cursor()
     cursor.execute("select name from sqlite_master where type = 'table';")
     ans = cursor.fetchall()
-    print(ans)
     connection.close()
 

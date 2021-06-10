@@ -1,6 +1,6 @@
 import csv
 import tkinter as tk
-from subprocess import Popen, call
+from subprocess import Popen
 from tkinter import PhotoImage, ttk
 from tkinter import messagebox
 import datetime
@@ -17,7 +17,7 @@ class Application(tk.Frame):
         root.title("Report Generator")
         logger.log(log=f"Logged into Report Generator : {datetime.datetime.now()}\n")
 
-        self.database = "records.csv"
+        self.database = "Database\\records.csv"
         # Menubar
 
         menu = tk.Menu(self)
@@ -409,9 +409,7 @@ class Application(tk.Frame):
             )
             logger.log(log=f"Pdf Generated :\t{datetime.datetime.now()}\n")
             self.logs.configure(state="disabled")
-            print(datetime.datetime.now())
-            report.Generate_Report(self.database)
-            print(datetime.datetime.now())
+            report.Generate_Report(database=self.database)
             self.statusbar.configure(text="Reports Generated...")
         else:
             return
@@ -665,8 +663,11 @@ class Application(tk.Frame):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.attributes("-fullscreen", True)
+    root.resizable(False, False)
     app = Application(root)
+
+    app.icon = PhotoImage(file="logo\\report_generator.jpg")
+    root.geometry("650x700")
 
     # Key-Bindings
 
