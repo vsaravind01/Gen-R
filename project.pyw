@@ -8,6 +8,7 @@ import Tooltip
 import json
 import dbexport
 import logger
+import report
 
 
 class Application(tk.Frame):
@@ -409,7 +410,7 @@ class Application(tk.Frame):
             logger.log(log=f"Pdf Generated :\t{datetime.datetime.now()}\n")
             self.logs.configure(state="disabled")
             print(datetime.datetime.now())
-            call(["python", "report.py"])
+            report.Generate_Report(self.database)
             print(datetime.datetime.now())
             self.statusbar.configure(text="Reports Generated...")
         else:
