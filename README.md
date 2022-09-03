@@ -1,4 +1,4 @@
-# Report-Generator
+# Gen-R (Generate-Reports)
 
 A standalone software that contains all the elements to digitalize the workflow of report generation including a friendly user-interface.
 The application packs with a fully featured user interface and a robust data backup tool.
